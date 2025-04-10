@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Sine Start</title>
+	<style>
+		canvas{ border: 1px solid black; }
+		button { margin-right: 10px; padding: 10px; font-size: 16px; }
+	</style>
+	<script>
+	"use strict";
+	const canvasWidth = 800, canvasHeight = 600;
+	let ctx;
+	let canvas;
+	let n = 0;
+	const divergence = 144.7;
+	const c = 2.8;
+
+	let paused = false;
+	let rewind = false;
+
+	let time;
+
+    window.onload = init;
+
+	function init(){
+		canvas = document.getElementById("canvas");
+		ctx = canvas.getContext("2d");
+		canvas.width = canvasWidth;
+		canvas.height = canvasHeight;
+		ctx.fillRect(0,0,canvasWidth,canvasHeight);
+        loop();
+	}
+
+    const loop = () => {
+		if (paused) return;
+
+		clearTimeout(time);
+		time = setTimeout(loop,1000/60);
+
+		if(rewind && n > 0){
+			n--;
+			ctx.fillStyle = "black";
+			let a = n * dtr(divergence);
+			let r = c * Math.sqrt(n);
+			let x = r * Math.cos(a) + canvasWidth/2;
+			let y = r * Math.sin(a) + canvasHeight/2;
+			drawCircle(ctx, x, y, 3, "black");
+
+		}
+		else if(!rewind){
+			let a = n * dtr(divergence);
+			let r = c * Math.sqrt(n);
+			let x = r * Math.cos(a) + canvasWidth/2;
+			let y = r * Math.sin(a) + canvasHeight/2;
+			let color = `rgb(${n % 256},0,255)`;
+			drawCircle(ctx,x,y,2,color); 
+			n++;
+		}
+		
+    }
+
+	// helpers
+	function dtr(degrees){
+		return degrees * (Math.PI/180);
+	}
+
+	function drawCircle(ctx,x,y,radius,color){
+		ctx.save();
+		ctx.fillStyle = color;
+		ctx.beginPath();
+		ctx.arc(x,y,radius,0,Math.PI * 2);
+		ctx.closePath();
+		ctx.fill();
+		ctx.restore();
+	}
+
+	//controls
+	function pause() {
+		paused = !paused;
+		if(!paused) {
+			loop();
+		}
+	}
+	function restart(){
+		paused = true;
+		n = 0;
+		ctx.fillStyle = "black";
+		ctx.fillRect(0,0,canvasWidth,canvasHeight);
+		rewind = false;
+		paused = false;
+		loop();
+	}
+	function reverse(){
+		rewind = !rewind
+	}
+
+
+	
+	</script>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<button onclick="pause()">Pause</button>
+	<button onclick="restart()">Restart</button>
+	<button onclick="reverse()">Reverse</button>
+
+	<h2>About This App</h2>
+    <ul>
+        <li>The three buttons allow you to pause, restart and reverse the pattern</li>
+        <li>The pause button stops the app by preventing the loop from running</li>
+        <li>The restart button sets n = 0 again and paints a black box on the canvas to erase the pattern</li>
+        <li>The reverse button subtracts 1 from n each loop and paints a black dot on over the dots in the opposite order they were placed</li>
+        <li>Other changes include: </li>
+		<ul>
+			<li>increased frame rate to 60 FPS </li>
+			<li>Increased Canvas size to 800x600 </li>
+			<li>C value and divergence are changed to 2.8 and 144 respectively</li>
+		</ul>
+    </ul>
+
+</body>
+</html>
