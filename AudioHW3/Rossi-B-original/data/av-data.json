@@ -1,0 +1,23 @@
+{
+    "title": "Audio Visualizer",
+    "instructions": [
+        "Click the 'Play' button to start.",
+        "Adjust the bass and treble sliders to modify the effect. Mew and Mewtwo react change the size of their orbs when you do this.",
+        "Enable or disable bars, circles, noise, inversion, or emboss effects using the checkboxes.",
+        "Click show controls to open DJ station. Here you upload any song you'd like, change the volume and change the audio form.",
+        "Other information: I added base and treble to the audio routing graph. The sprite class is for the stars.", 
+        "I use it to place them on the screen and make them pulse. In the JSON file I have these instructions, the title and the star locations."
+      ],
+    "stars": [
+        { "x": 50, "y": 100 },
+        { "x": 100, "y": 40 },
+        { "x": 650, "y": 400 },
+        { "x": 550, "y": 350 },
+        { "x": 900, "y": 100 },
+        { "x": 800, "y": 450 },
+        { "x": 950, "y": 300 },
+        { "x": 100, "y": 350 },
+        { "x": 150, "y": 200 },
+        { "x": 500, "y": 150 }
+    ]
+}

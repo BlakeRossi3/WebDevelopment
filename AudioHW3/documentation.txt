@@ -1,0 +1,23 @@
+Blake Rossi
+Audio Visualizer - TypeScript Refactor - HW3
+
+
+TypeScript Implementation
+- Changed all .js files to .ts extensions
+- Added primitive type annotations such as string, number and void
+- Updated import statements to work with TypeScript
+- Added appropriate type definitions throughout the code
+- HTML elements were typed out using "as HTML____Element"
+- Interface folder created for draw-params
+
+
+Challenges
+- Refactoring HTML IDs to match kebab-case while syncing them with TypeScript references.
+- In converting to typescript I ran into some issues between classes due to poor organization and naming. 
+
+
+Improvements Made
+- Stronger structure with clear separation of logic.
+- Renamed element IDs and file names to match naming standard
+- Code is now in a single file: `bundle.js`. This is compatible with both local and server deployment
+

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css" >
+
+  <script src="dist/bundle.js" type="module"></script> 
+
+  <title>Adoptable Creatures</title>
+</head>
+<body>
+  <header>
+    <h1>Adoptable Creatures</h1>
+    <p>Choose a category to view adoptable creatures:</p>
+  </header>
+  <main>
+    <section>
+      <label for="creatureType">Select a type:</label>
+      <select id="creatureType">
+        <option value="cats">Cats</option>
+        <option value="dogs">Dogs</option>
+        <option value="dragons">Dragons</option>
+      </select>
+      <button id="getDataButton">Get Data</button>
+    </section>
+    <section class="hidden" id="errorMessage">Error loading data</section>
+    <section id="results">
+      <!-- Results will appear here -->
+    </section>
+  </main>
+  <footer>
+    <p>Final Practical: Adoptable Creatures API - by Blake Rossi</p>
+  </footer>
+</body>
+</html>
