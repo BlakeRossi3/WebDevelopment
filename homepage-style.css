@@ -1,84 +1,282 @@
-* {
+/* ─────────────────────────────────────────────────────────
+   IGME-330 Project Portal — homepage-style.css
+   Design mirrors Blake Rossi's portfolio (blakerossi-portfolio).
+   Fonts: Syne (display) · Space Grotesk (body) · JetBrains Mono
+   ───────────────────────────────────────────────────────── */
+
+/* ── reset ── */
+*, *::before, *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-body {
-  font-family: 'Inter';
-  background-color: #f2f2f2;
-  text-align: center;
-  padding: 40px 20px;
+/* ── root ── */
+:root {
+  --font-body:    "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+  color-scheme: dark;
 }
 
-h1 {
-  font-size: 2.5rem;
-  font-weight: 600;
-  color: lightblue;
-  background-color: #555;
-  padding: 20px;
-  max-width: 600px;
-  margin: 0 auto 40px auto;
-  border-radius: 12px;
+html, body {
+  min-height: 100%;
+  font-family: var(--font-body);
+  background-color: #030712;
+  color: #e2e8f0;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-  justify-content: center;
-}
-
-
-.project-btn {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  background-color: #333;
-  color: white;
-  border: none;
-  border-radius: 12px;
+a {
   text-decoration: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  transition: background-color 0.3s ease-in-out;
-  overflow: hidden;
+  color: inherit;
+}
+
+/* ══════════════════════════════════════════════════════════
+   BACKGROUND LAYERS
+   ══════════════════════════════════════════════════════════ */
+
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.25;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(circle at 50% 15%, black 0%, transparent 60%);
+}
+
+/* Ambient violet glow — matches web-dev-fun themeColor */
+.page-gradient {
+  position: fixed;
+  bottom: -30%;
+  right: -30%;
+  width: 90%;
+  height: 90%;
+  z-index: -2;
+  pointer-events: none;
+  border-radius: 50%;
+  background: #4c1d95;
+  filter: blur(120px);
+  opacity: 0.12;
+}
+
+/* ══════════════════════════════════════════════════════════
+   APP ROOT
+   ══════════════════════════════════════════════════════════ */
+
+#app {
   position: relative;
+  z-index: 0;
+  min-height: 100vh;
+  padding-bottom: 4rem;
 }
 
+/* ══════════════════════════════════════════════════════════
+   HEADER
+   ══════════════════════════════════════════════════════════ */
 
-.project-btn:hover {
-  background-color: #555;
+.site-header {
+  text-align: center;
+  padding: 5rem 1.5rem 3.5rem;
 }
 
-.project-btn span {
-  z-index: 1;
-  padding: 10px;
+.site-header__label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: rgba(255, 255, 255, 0.38);
+  margin-bottom: 0.65rem;
 }
 
-/* Placeholder for future images */
-.project-btn::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
+.site-header__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.site-header__sub {
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.42);
+  font-weight: 500;
+}
+
+/* ══════════════════════════════════════════════════════════
+   CARD GRID
+   ══════════════════════════════════════════════════════════ */
+
+.card-grid {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+/* ══════════════════════════════════════════════════════════
+   CARD
+   ══════════════════════════════════════════════════════════ */
+
+.card {
+  display: flex;
+  flex-direction: row;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0b0f1a;
+  overflow: hidden;
+  min-height: 220px;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.25s ease;
+  --project-accent: #a78bfa;
+}
+
+.card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
+  transform: translateY(-3px);
+}
+
+/* ── visual panel (left) ── */
+.card__visual {
+  width: 42%;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
   background-size: cover;
   background-position: center;
-  opacity: 0.25;
-  z-index: 0;
-  background-image: var(--bg);
+  background-repeat: no-repeat;
+  transition: filter 0.4s ease;
 }
 
-@media (max-width: 768px) {
-  .project-btn {
-    width: 40vw;
+/* right-edge fade blends into the body panel */
+.card__visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to right, transparent 45%, rgba(10, 12, 25, 0.9) 100%);
+}
+
+.card:hover .card__visual {
+  filter: brightness(1.1);
+}
+
+/* ── content panel (right) ── */
+.card__body {
+  flex: 1;
+  padding: 1.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  background: #0a0c19;
+  position: relative;
+  z-index: 2;
+}
+
+.card__tag {
+  font-family: var(--font-mono);
+  font-size: 0.67rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--project-accent);
+  margin-bottom: 0.3rem;
+}
+
+.card__title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.card__subtitle {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 400;
+  line-height: 1.55;
+  flex: 1;
+}
+
+.card__pills {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.card__pill {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 0.2rem 0.52rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ══════════════════════════════════════════════════════════
+   FOOTER
+   ══════════════════════════════════════════════════════════ */
+
+.site-footer {
+  text-align: center;
+  padding: 3.5rem 1.5rem 2rem;
+}
+
+.footer-link {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.35);
+  transition: color 0.2s;
+}
+
+.footer-link:hover {
+  color: #a78bfa;
+}
+
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .card {
+    flex-direction: column;
+  }
+
+  .card__visual {
+    width: 100%;
+    min-height: 160px;
+  }
+
+  .card__visual::after {
+    background: linear-gradient(to bottom, transparent 40%, rgba(10, 12, 25, 0.92) 100%);
   }
 }
 
 @media (max-width: 480px) {
-  .project-btn {
-    width: 80vw;
+  .site-header {
+    padding: 4rem 1rem 2.5rem;
+  }
+
+  .card-grid {
+    padding: 0 1rem;
+  }
+
+  .card__body {
+    padding: 1.25rem 1.1rem;
   }
 }

@@ -3,38 +3,155 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>IGME330 Projects – Blake Rossi</title>
+  <title>IGME-330 Projects – Blake Rossi</title>
   <link rel="stylesheet" href="homepage-style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <h1>IGME330 Project Portal</h1>
-  <div class="grid">
-    <a class = 'project-btn' href="AudioHW/index.html" style="--bg:url('images/audioImage.png')">
-      <span>Audio Visualizer</span>
-    </a>
-    <a class = 'project-btn' href="Botany/sine-2.html" style="--bg:url('images/sineImage.png')">
-      <span>Algorithmic Botany</span>
-    </a>
-    <a class = 'project-btn' href="Botany/phyllotaxis-controls.html" style="--bg:url('images/botanyImage.png')">
-      <span>Algorithmic Botany 2</span>
-    </a>
-    <a class = 'project-btn' href="bulma/index-7.html" style="--bg:url('images/bulmaImage.png')">
-      <span>Bulma Coffee Example</span>
-    </a>
-    <a class = 'project-btn' href="Canvas/index.html" style="--bg:url('images/canvasImage.png')">
-      <span>JS Canvas</span>
-    </a>
-    <a class = 'project-btn' href="greeter-modules/greeter.html" style="--bg:url('images/webpackImage.png')">
-      <span>Webpack</span>
-    </a>
-    <a class = 'project-btn' href="mapbox/rit-coffee-founder/index.html" style="--bg:url('images/coffeeImage.png')">
-      <span>Rit Coffee Finder</span>
-    </a>
-    <a class = 'project-btn' href="technobabble/technobabble-final.html" style="--bg:url('images/technoImage.png')">
-      <span>Technobabble</span>
-    </a>
+
+  <!-- decorative background layers -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="page-gradient" aria-hidden="true"></div>
+
+  <div id="app">
+
+    <header class="site-header">
+      <p class="site-header__label">Blake Rossi</p>
+      <h1 class="site-header__title">IGME-330</h1>
+      <p class="site-header__sub">Rich Media Web App Development &middot; RIT &middot; 2024</p>
+    </header>
+
+    <main class="card-grid">
+
+      <!-- Audio Visualizer -->
+      <a class="card" href="AudioHW/index.html" style="--project-accent: #a78bfa">
+        <div class="card__visual" style="background: linear-gradient(135deg, rgba(76,29,149,0.75), rgba(45,27,105,0.92)), url('images/audioImage.png') center / cover no-repeat;"></div>
+        <div class="card__body">
+          <span class="card__tag">Web Audio API &middot; Canvas API</span>
+          <h2 class="card__title">Audio Visualizer</h2>
+          <p class="card__subtitle">Real-time music visualizer with frequency analysis, bar &amp; circle renderers, EQ controls, colour effects, custom file upload, and fullscreen mode.</p>
+          <div class="card__pills">
+            <span class="card__pill">Web Audio API</span>
+            <span class="card__pill">Canvas API</span>
+            <span class="card__pill">ES Modules</span>
+            <span class="card__pill">JavaScript</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Algorithmic Botany (Sine) -->
+      <a class="card" href="Botany/sine-2.html" style="--project-accent: #34d399">
+        <div class="card__visual" style="background: linear-gradient(135deg, rgba(6,78,59,0.8), rgba(15,118,110,0.85)), url('images/sineImage.png') center / cover no-repeat;"></div>
+        <div class="card__body">
+          <span class="card__tag">Procedural Generation &middot; Canvas</span>
+          <h2 class="card__title">Algorithmic Botany</h2>
+          <p class="card__subtitle">Sine-wave-driven procedural plant generation — curves and branches grown mathematically across the canvas with interactive parameter controls.</p>
+          <div class="card__pills">
+            <span class="card__pill">Canvas API</span>
+            <span class="card__pill">Sine Waves</span>
+            <span class="card__pill">JavaScript</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Algorithmic Botany 2 (Phyllotaxis) -->
+      <a class="card" href="Botany/phyllotaxis-controls.html" style="--project-accent: #22d3ee">
+        <div class="card__visual" style="background: linear-gradient(135deg, rgba(14,116,144,0.8), rgba(21,94,117,0.88)), url('images/botanyImage.png') center / cover no-repeat;"></div>
+        <div class="card__body">
+          <span class="card__tag">Procedural Generation &middot; Canvas</span>
+          <h2 class="card__title">Algorithmic Botany 2</h2>
+          <p class="card__subtitle">Phyllotaxis spiral generation — the same golden-angle math that governs sunflower seeds, rendered as interactive dot fields with live controls.</p>
+          <div class="card__pills">
+            <span class="card__pill">Canvas API</span>
+            <span class="card__pill">Phyllotaxis</span>
+            <span class="card__pill">JavaScript</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Bulma Coffee Example -->
+      <a class="card" href="bulma/index-7.html" style="--project-accent: #fbbf24">
+        <div class="card__visual" style="background: linear-gradient(135deg, rgba(120,53,15,0.8), rgba(146,64,14,0.88)), url('images/bulmaImage.png') center / cover no-repeat;"></div>
+        <div class="card__body">
+          <span class="card__tag">CSS Framework &middot; Responsive UI</span>
+          <h2 class="card__title">Bulma Coffee Example</h2>
+          <p class="card__subtitle">A responsive layout built with the Bulma CSS framework — demonstrating component-driven UI, grid systems, and clean typography at scale.</p>
+          <div class="card__pills">
+            <span class="card__pill">Bulma CSS</span>
+            <span class="card__pill">HTML</span>
+            <span class="card__pill">Responsive</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- JS Canvas Screensaver -->
+      <a class="card" href="Canvas/index.html" style="--project-accent: #94a3b8">
+        <div class="card__visual" style="background: linear-gradient(135deg, rgba(30,41,59,0.85), rgba(15,23,42,0.92)), url('images/canvasImage.png') center / cover no-repeat;"></div>
+        <div class="card__body">
+          <span class="card__tag">Canvas API &middot; Animation</span>
+          <h2 class="card__title">JS Canvas Screensaver</h2>
+          <p class="card__subtitle">Animated canvas screensaver drawing rectangles, arcs, and lines with play/pause/clear controls. Click anywhere in paused mode to spraypaint shapes.</p>
+          <div class="card__pills">
+            <span class="card__pill">Canvas API</span>
+            <span class="card__pill">Animation Loop</span>
+            <span class="card__pill">JavaScript</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Webpack / Greeter Modules -->
+      <a class="card" href="greeter-modules/greeter.html" style="--project-accent: #60a5fa">
+        <div class="card__visual" style="background: linear-gradient(135deg, rgba(30,58,95,0.85), rgba(30,64,175,0.88)), url('images/webpackImage.png') center / cover no-repeat;"></div>
+        <div class="card__body">
+          <span class="card__tag">Module Bundling &middot; Webpack</span>
+          <h2 class="card__title">Webpack Greeter</h2>
+          <p class="card__subtitle">ES modules bundled with Webpack — separated into greeter logic, UI handler, and entry point, then compiled into a single optimised output.</p>
+          <div class="card__pills">
+            <span class="card__pill">Webpack</span>
+            <span class="card__pill">ES Modules</span>
+            <span class="card__pill">JavaScript</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- RIT Coffee Finder -->
+      <a class="card" href="mapbox/rit-coffee-founder/index.html" style="--project-accent: #4ade80">
+        <div class="card__visual" style="background: linear-gradient(135deg, rgba(20,83,45,0.8), rgba(22,101,52,0.88)), url('images/coffeeImage.png') center / cover no-repeat;"></div>
+        <div class="card__body">
+          <span class="card__tag">Mapbox GL JS &middot; GeoJSON</span>
+          <h2 class="card__title">RIT Coffee Finder</h2>
+          <p class="card__subtitle">Interactive map of coffee spots near RIT campus using Mapbox GL JS — custom markers, GeoJSON data loading, and programmatic camera transitions.</p>
+          <div class="card__pills">
+            <span class="card__pill">Mapbox GL JS</span>
+            <span class="card__pill">GeoJSON</span>
+            <span class="card__pill">JavaScript</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Technobabble -->
+      <a class="card" href="technobabble/technobabble-final.html" style="--project-accent: #f472b6">
+        <div class="card__visual" style="background: linear-gradient(135deg, rgba(136,19,55,0.82), rgba(159,18,57,0.9)), url('images/technoImage.png') center / cover no-repeat;"></div>
+        <div class="card__body">
+          <span class="card__tag">DOM Manipulation &middot; JS</span>
+          <h2 class="card__title">Technobabble Generator</h2>
+          <p class="card__subtitle">Generates randomised sci-fi technobabble by composing vocabulary sets — an exercise in DOM manipulation, randomness, and array composition.</p>
+          <div class="card__pills">
+            <span class="card__pill">JavaScript</span>
+            <span class="card__pill">DOM API</span>
+            <span class="card__pill">Arrays</span>
+          </div>
+        </div>
+      </a>
+
+    </main>
+
+    <footer class="site-footer">
+      <a href="https://blakerossi3.github.io/blakerossi-portfolio/" class="footer-link">&#8592; Back to Portfolio</a>
+    </footer>
+
   </div>
 </body>
 </html>
