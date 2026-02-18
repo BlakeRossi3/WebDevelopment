@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Algorithmic Botany — Blake Rossi</title>
+  <title>Algorithmic Botany — Sine Waves</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,82 +20,198 @@
       padding: 2.5rem 1.5rem 3rem;
       gap: 1.25rem;
     }
-    h2 {
-      font-size: 1.1rem;
-      color: rgba(255,255,255,0.85);
-      margin: 1.5rem 0 0.5rem;
-      align-self: flex-start;
-      max-width: 420px;
-    }
     canvas {
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 0.5rem;
       box-shadow: 0 0 40px rgba(0,0,0,0.6);
+      max-width: 100%;
+      height: auto;
     }
-    ul {
-      max-width: 420px;
+
+    /* ── Controls panel ── */
+    .controls-panel {
+      width: 100%;
+      max-width: 560px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 0.85rem;
+      padding: 1.25rem 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+    .panel-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.28);
+      margin: 0;
+    }
+    .ctrl-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.9rem 1rem;
+    }
+    .ctrl {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .ctrl-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.25rem;
+    }
+    .ctrl-header label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.57rem;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      white-space: nowrap;
+    }
+    .ctrl-header .val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.67rem;
+      color: rgba(255,255,255,0.65);
+      white-space: nowrap;
+    }
+    .ctrl input[type=range] { width: 100%; }
+
+    .divider {
+      height: 1px;
+      background: rgba(255,255,255,0.06);
+    }
+
+    /* ── Wave toggle row ── */
+    .wave-row {
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .wave-ctrl {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .wave-ctrl label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.48);
+    }
+    input[type=color] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 5px;
+      padding: 2px;
+      background: transparent;
+      cursor: pointer;
+    }
+    input[type=color]::-webkit-color-swatch-wrapper { padding: 0; }
+    input[type=color]::-webkit-color-swatch { border: none; border-radius: 3px; }
+
+    .hint {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.07em;
+      color: rgba(255,255,255,0.2);
+      max-width: 560px;
+      line-height: 1.65;
       align-self: flex-start;
-      padding-left: 1.25rem;
     }
-    ul li {
-      font-size: 0.88rem;
-      color: rgba(255,255,255,0.55);
-      line-height: 1.7;
+
+    @media (max-width: 540px) {
+      .ctrl-grid { grid-template-columns: 1fr 1fr; }
     }
-    ul ul li { color: rgba(255,255,255,0.4); }
   </style>
 
   <script>
   "use strict";
-  const canvasWidth = 400, canvasHeight = 300;
+  const canvasWidth = 560, canvasHeight = 280;
   let ctx;
-  let x = 0, y = 0;
-  let angle = 0;
-  const fps = 12;
+  let x = 0, angle = 0;
+
+  // — user-controlled parameters —
+  let angleStep = 0.06;
+  let xSpeed    = 2;
+  let amp1      = 100, amp2 = 100;
+  let freq1     = 1.0,  freq2 = 1.0;
+  let dotSize   = 2;
+  let trailDiv  = 55;
+  let color1    = "#ffffff", color2 = "#ff3355", color3 = "#ffd700";
+  let show1     = true, show2 = true, show3 = true;
 
   window.onload = init;
 
-  function init(){
+  function init() {
     ctx = canvas.getContext("2d");
-    canvas.width = canvasWidth;
+    canvas.width  = canvasWidth;
     canvas.height = canvasHeight;
-    ctx.fillRect(0,0,canvasWidth,canvasHeight);
-    loop();
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    initControls();
+    requestAnimationFrame(loop);
   }
 
   const loop = () => {
-    setTimeout(loop,1000/fps);
+    requestAnimationFrame(loop);
+
+    // fade trail
     ctx.save();
     ctx.fillStyle = "black";
-    ctx.globalAlpha = 1/fps;
-    ctx.fillRect(0,0,canvasWidth,canvasHeight);
+    ctx.globalAlpha = 1 / trailDiv;
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     ctx.restore();
-    x += 10;
-    angle += 0.3;
-    y = canvasHeight/2 + Math.sin(angle) * 100;
-    drawCircle(ctx,x,y,2,"white");
 
-    y = canvasHeight/2 + Math.cos(angle) * 100;
-    drawCircle(ctx,x,y,2,"red");
+    x     += xSpeed;
+    angle += angleStep;
 
-    y = canvasHeight/2 + Math.sqrt(x%50) * 5;
-    drawCircle(ctx,x,y,4,"yellow");
+    const cy = canvasHeight / 2;
+    if (show1) drawDot(x, cy + Math.sin(angle * freq1) * amp1, dotSize, color1);
+    if (show2) drawDot(x, cy + Math.cos(angle * freq2) * amp2, dotSize, color2);
+    if (show3) drawDot(x, cy + Math.sqrt(x % 80) * 5.8,        Math.max(1, dotSize - 0.5), color3);
 
-    if(x > canvasWidth) x = 0;
-  }
+    if (x > canvasWidth) x = 0;
+  };
 
-  function dtr(degrees){
-    return degrees * (Math.PI/180);
-  }
-
-  function drawCircle(ctx,x,y,radius,color){
+  function drawDot(x, y, r, color) {
     ctx.save();
     ctx.fillStyle = color;
     ctx.beginPath();
-    ctx.arc(x,y,radius,0,Math.PI * 2);
-    ctx.closePath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
+  }
+
+  function initControls() {
+    function sl(id, valId, fmt, set) {
+      const el  = document.getElementById(id);
+      const vEl = document.getElementById(valId);
+      el.addEventListener('input', () => { set(+el.value); vEl.textContent = fmt(+el.value); });
+    }
+    sl('sl-speed', 'val-speed', v => v.toFixed(3),        v => angleStep = v);
+    sl('sl-xspd',  'val-xspd',  v => v.toFixed(1) + 'px', v => xSpeed    = v);
+    sl('sl-amp1',  'val-amp1',  v => v,                    v => amp1      = v);
+    sl('sl-amp2',  'val-amp2',  v => v,                    v => amp2      = v);
+    sl('sl-freq1', 'val-freq1', v => v.toFixed(1) + '×',  v => freq1     = v);
+    sl('sl-freq2', 'val-freq2', v => v.toFixed(1) + '×',  v => freq2     = v);
+    sl('sl-size',  'val-size',  v => v.toFixed(1) + 'px', v => dotSize   = v);
+    sl('sl-trail', 'val-trail', v => v,                    v => trailDiv  = v);
+
+    document.getElementById('col1').addEventListener('input', e => color1 = e.target.value);
+    document.getElementById('col2').addEventListener('input', e => color2 = e.target.value);
+    document.getElementById('col3').addEventListener('input', e => color3 = e.target.value);
+    document.getElementById('cb1').addEventListener('change', e => show1 = e.target.checked);
+    document.getElementById('cb2').addEventListener('change', e => show2 = e.target.checked);
+    document.getElementById('cb3').addEventListener('change', e => show3 = e.target.checked);
   }
   </script>
 </head>
@@ -113,6 +229,103 @@
   </header>
 
   <canvas id="canvas"></canvas>
+
+  <div class="controls-panel">
+    <p class="panel-title">Wave Controls</p>
+    <div class="ctrl-grid">
+
+      <div class="ctrl">
+        <div class="ctrl-header">
+          <label for="sl-speed">Speed</label>
+          <span class="val" id="val-speed">0.060</span>
+        </div>
+        <input type="range" id="sl-speed" min="0.005" max="0.3" step="0.005" value="0.06">
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-header">
+          <label for="sl-xspd">X Speed</label>
+          <span class="val" id="val-xspd">2.0px</span>
+        </div>
+        <input type="range" id="sl-xspd" min="0.5" max="8" step="0.5" value="2">
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-header">
+          <label for="sl-size">Dot Size</label>
+          <span class="val" id="val-size">2.0px</span>
+        </div>
+        <input type="range" id="sl-size" min="0.5" max="8" step="0.5" value="2">
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-header">
+          <label for="sl-trail">Trail</label>
+          <span class="val" id="val-trail">55</span>
+        </div>
+        <input type="range" id="sl-trail" min="5" max="120" step="1" value="55">
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-header">
+          <label for="sl-amp1">Sin Amp</label>
+          <span class="val" id="val-amp1">100</span>
+        </div>
+        <input type="range" id="sl-amp1" min="10" max="130" step="1" value="100">
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-header">
+          <label for="sl-freq1">Sin Freq</label>
+          <span class="val" id="val-freq1">1.0×</span>
+        </div>
+        <input type="range" id="sl-freq1" min="0.5" max="5" step="0.1" value="1">
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-header">
+          <label for="sl-amp2">Cos Amp</label>
+          <span class="val" id="val-amp2">100</span>
+        </div>
+        <input type="range" id="sl-amp2" min="10" max="130" step="1" value="100">
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-header">
+          <label for="sl-freq2">Cos Freq</label>
+          <span class="val" id="val-freq2">1.0×</span>
+        </div>
+        <input type="range" id="sl-freq2" min="0.5" max="5" step="0.1" value="1">
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="wave-row">
+      <div class="wave-ctrl">
+        <input type="checkbox" id="cb1" checked>
+        <label for="cb1">Sin</label>
+        <input type="color" id="col1" value="#ffffff">
+      </div>
+      <div class="wave-ctrl">
+        <input type="checkbox" id="cb2" checked>
+        <label for="cb2">Cos</label>
+        <input type="color" id="col2" value="#ff3355">
+      </div>
+      <div class="wave-ctrl">
+        <input type="checkbox" id="cb3" checked>
+        <label for="cb3">√x</label>
+        <input type="color" id="col3" value="#ffd700">
+      </div>
+    </div>
+  </div>
+
+  <p class="hint">
+    Try Sin Freq 2× + Cos Freq 3× for harmonic interference patterns ·
+    High Trail value builds persistent luminous paths ·
+    Set Sin and Cos to different amplitudes for asymmetric waveforms
+  </p>
 
 </body>
 </html>

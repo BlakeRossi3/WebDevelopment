@@ -24,33 +24,139 @@
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 0.5rem;
       box-shadow: 0 0 48px rgba(0,0,0,0.65);
+      max-width: 100%;
+      height: auto;
     }
+
+    /* ── Button row (pause/restart/reverse) ── */
     .controls-row {
       display: flex;
       gap: 0.75rem;
       flex-wrap: wrap;
       justify-content: center;
     }
-    h2 {
-      font-size: 1rem;
-      color: rgba(255,255,255,0.8);
-      margin: 1.5rem 0 0.4rem;
-      align-self: flex-start;
-      max-width: 840px;
+
+    /* ── Controls panel ── */
+    .controls-panel {
       width: 100%;
+      max-width: 680px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 0.85rem;
+      padding: 1.25rem 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
     }
-    ul {
-      max-width: 840px;
-      width: 100%;
-      padding-left: 1.25rem;
+    .panel-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.28);
+      margin: 0;
+    }
+    .ctrl-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem 1.5rem;
+    }
+    .ctrl-wide {
+      grid-column: 1 / -1;
+    }
+    .ctrl {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .ctrl-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.25rem;
+    }
+    .ctrl-header label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      white-space: nowrap;
+    }
+    .ctrl-header .val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.7);
+      white-space: nowrap;
+    }
+    .ctrl input[type=range] { width: 100%; }
+    .ctrl select {
+      font-size: 0.8rem;
+      padding: 0.3rem 0.6rem;
+    }
+
+    /* golden angle indicator on the divergence track */
+    .div-track-wrap {
+      position: relative;
+    }
+    .div-track-wrap input[type=range] { width: 100%; }
+    .golden-tick {
+      position: absolute;
+      bottom: -8px;
+      /* left is set by JS */
+      width: 1px;
+      height: 6px;
+      background: rgba(255,215,0,0.7);
+      pointer-events: none;
+    }
+    .golden-label {
+      position: absolute;
+      bottom: -20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.52rem;
+      color: rgba(255,215,0,0.55);
+      pointer-events: none;
+      transform: translateX(-50%);
+      white-space: nowrap;
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(255,255,255,0.06);
+    }
+
+    /* ── Presets ── */
+    .presets-row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .preset-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+    }
+    .preset-btn.active {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.35);
+    }
+
+    .hint {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.07em;
+      color: rgba(255,255,255,0.2);
+      max-width: 680px;
+      line-height: 1.65;
       align-self: flex-start;
     }
-    ul li {
-      font-size: 0.88rem;
-      color: rgba(255,255,255,0.52);
-      line-height: 1.7;
+
+    @media (max-width: 480px) {
+      .ctrl-grid { grid-template-columns: 1fr; }
+      .ctrl-wide { grid-column: 1; }
     }
-    ul ul li { color: rgba(255,255,255,0.38); }
   </style>
 
   <script>
@@ -59,80 +165,161 @@
   let ctx;
   let canvas;
   let n = 0;
-  const divergence = 144.7;
-  const c = 2.8;
+
+  // — user-controlled parameters —
+  let divergence = 137.5;   // degrees — golden angle
+  let c          = 3.5;     // radial scale
+  let dotR       = 2;       // dot radius
+  let speed      = 5;       // dots drawn per frame
+  let colorMode  = 'rainbow';
 
   let paused = false;
   let rewind = false;
-
   let time;
+
+  // golden angle constant
+  const GOLDEN_ANGLE = 360 * (1 - 1 / ((1 + Math.sqrt(5)) / 2));  // ≈ 137.508°
+  const DIV_MIN = 80, DIV_MAX = 175;
 
   window.onload = init;
 
-  function init(){
+  function init() {
     canvas = document.getElementById("canvas");
-    ctx = canvas.getContext("2d");
-    canvas.width = canvasWidth;
+    ctx    = canvas.getContext("2d");
+    canvas.width  = canvasWidth;
     canvas.height = canvasHeight;
-    ctx.fillRect(0,0,canvasWidth,canvasHeight);
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    initControls();
     loop();
   }
 
   const loop = () => {
     if (paused) return;
-
     clearTimeout(time);
-    time = setTimeout(loop,1000/60);
+    time = setTimeout(loop, 1000 / 60);
 
-    if(rewind && n > 0){
-      n--;
-      ctx.fillStyle = "black";
-      let a = n * dtr(divergence);
-      let r = c * Math.sqrt(n);
-      let x = r * Math.cos(a) + canvasWidth/2;
-      let y = r * Math.sin(a) + canvasHeight/2;
-      drawCircle(ctx, x, y, 3, "black");
+    for (let i = 0; i < speed; i++) {
+      if (rewind && n > 0) {
+        n--;
+        const a = n * dtr(divergence);
+        const r = c * Math.sqrt(n);
+        const x = r * Math.cos(a) + canvasWidth  / 2;
+        const y = r * Math.sin(a) + canvasHeight / 2;
+        drawDot(x, y, dotR + 2, "black");
+      } else if (!rewind) {
+        const a = n * dtr(divergence);
+        const r = c * Math.sqrt(n);
+        const x = r * Math.cos(a) + canvasWidth  / 2;
+        const y = r * Math.sin(a) + canvasHeight / 2;
+        drawDot(x, y, dotR, getColor(n, r));
+        n++;
+      }
     }
-    else if(!rewind){
-      let a = n * dtr(divergence);
-      let r = c * Math.sqrt(n);
-      let x = r * Math.cos(a) + canvasWidth/2;
-      let y = r * Math.sin(a) + canvasHeight/2;
-      let color = `rgb(${n % 256},0,255)`;
-      drawCircle(ctx,x,y,2,color);
-      n++;
+  };
+
+  function getColor(n, r) {
+    switch (colorMode) {
+      case 'rainbow':
+        return `hsl(${n % 360},85%,62%)`;
+      case 'golden':
+        // distributes hues using the golden angle itself — perfectly uniform
+        return `hsl(${(n * GOLDEN_ANGLE) % 360},75%,65%)`;
+      case 'cycle':
+        return `rgb(${n % 256},0,255)`;
+      case 'plasma': {
+        const t = (n % 400) / 400;
+        return `hsl(${270 + t * 90},90%,${45 + t * 25}%)`;
+      }
+      case 'depth': {
+        const maxR = c * Math.sqrt(16000);
+        const t = Math.min(r / maxR, 1);
+        return `hsl(${195 + t * 70},${60 + t * 25}%,${18 + t * 52}%)`;
+      }
+      case 'mono':
+        return 'rgba(255,255,255,0.82)';
+      default:
+        return '#fff';
     }
   }
 
-  function dtr(degrees){
-    return degrees * (Math.PI/180);
-  }
+  function dtr(degrees) { return degrees * (Math.PI / 180); }
 
-  function drawCircle(ctx,x,y,radius,color){
+  function drawDot(x, y, r, color) {
     ctx.save();
     ctx.fillStyle = color;
     ctx.beginPath();
-    ctx.arc(x,y,radius,0,Math.PI * 2);
-    ctx.closePath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
   }
 
   function pause() {
     paused = !paused;
-    if(!paused) { loop(); }
+    document.getElementById('btn-pause').textContent = paused ? 'Resume' : 'Pause';
+    if (!paused) loop();
   }
-  function restart(){
+
+  function restart() {
     paused = true;
     n = 0;
-    ctx.fillStyle = "black";
-    ctx.fillRect(0,0,canvasWidth,canvasHeight);
     rewind = false;
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    document.getElementById('btn-pause').textContent = 'Pause';
     paused = false;
     loop();
   }
-  function reverse(){
+
+  function reverse() {
     rewind = !rewind;
+    document.getElementById('btn-rev').textContent = rewind ? 'Forward' : 'Reverse';
+  }
+
+  function setPreset(angle) {
+    divergence = angle;
+    const sl  = document.getElementById('sl-div');
+    const val = document.getElementById('val-div');
+    sl.value  = angle;
+    val.textContent = angle.toFixed(3) + '°';
+    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    restart();
+  }
+
+  function initControls() {
+    // Divergence slider + golden tick marker
+    const slDiv  = document.getElementById('sl-div');
+    const valDiv = document.getElementById('val-div');
+    const tick   = document.getElementById('golden-tick');
+    const tickLbl = document.getElementById('golden-lbl');
+
+    function positionGoldenTick() {
+      const pct = (GOLDEN_ANGLE - DIV_MIN) / (DIV_MAX - DIV_MIN);
+      const pxPct = pct * 100;
+      tick.style.left    = `calc(${pxPct}% - 0.5px)`;
+      tickLbl.style.left = `${pxPct}%`;
+    }
+    positionGoldenTick();
+
+    slDiv.addEventListener('input', () => {
+      divergence = +slDiv.value;
+      valDiv.textContent = divergence.toFixed(3) + '°';
+      document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+    });
+
+    function sl(id, valId, fmt, set) {
+      const el  = document.getElementById(id);
+      const vEl = document.getElementById(valId);
+      el.addEventListener('input', () => { set(+el.value); vEl.textContent = fmt(+el.value); });
+    }
+    sl('sl-c',     'val-c',     v => v.toFixed(1),        v => c    = v);
+    sl('sl-size',  'val-size',  v => v.toFixed(1) + 'px', v => dotR = v);
+    sl('sl-speed', 'val-speed', v => v + '/fr',            v => speed = +v);
+
+    document.getElementById('sel-color').addEventListener('change', e => {
+      colorMode = e.target.value;
+    });
   }
   </script>
 </head>
@@ -152,25 +339,90 @@
   <canvas id="canvas"></canvas>
 
   <div class="controls-row">
-    <button onclick="pause()">Pause</button>
+    <button onclick="pause()" id="btn-pause">Pause</button>
     <button onclick="restart()">Restart</button>
-    <button onclick="reverse()">Reverse</button>
+    <button onclick="reverse()" id="btn-rev">Reverse</button>
   </div>
 
-  <h2>About This App</h2>
-  <ul>
-    <li>The three buttons allow you to pause, restart and reverse the pattern</li>
-    <li>The pause button stops the app by preventing the loop from running</li>
-    <li>The restart button sets n = 0 again and paints a black box on the canvas to erase the pattern</li>
-    <li>The reverse button subtracts 1 from n each loop and paints a black dot over the dots in the opposite order they were placed</li>
-    <li>Other changes include:
-      <ul>
-        <li>Increased frame rate to 60 FPS</li>
-        <li>Increased canvas size to 800×600</li>
-        <li>C value and divergence changed to 2.8 and 144 respectively</li>
-      </ul>
-    </li>
-  </ul>
+  <div class="controls-panel">
+    <p class="panel-title">Phyllotaxis Controls</p>
+
+    <div class="ctrl-grid">
+
+      <!-- Divergence — full width, most important parameter -->
+      <div class="ctrl ctrl-wide">
+        <div class="ctrl-header">
+          <label for="sl-div">Divergence Angle</label>
+          <span class="val" id="val-div">137.500°</span>
+        </div>
+        <div class="div-track-wrap">
+          <input type="range" id="sl-div" min="80" max="175" step="0.001" value="137.5">
+          <div class="golden-tick" id="golden-tick"></div>
+          <div class="golden-label" id="golden-lbl">φ</div>
+        </div>
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-header">
+          <label for="sl-c">Scale (c)</label>
+          <span class="val" id="val-c">3.5</span>
+        </div>
+        <input type="range" id="sl-c" min="0.5" max="10" step="0.1" value="3.5">
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-header">
+          <label for="sl-size">Dot Size</label>
+          <span class="val" id="val-size">2.0px</span>
+        </div>
+        <input type="range" id="sl-size" min="0.5" max="6" step="0.5" value="2">
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-header">
+          <label for="sl-speed">Speed</label>
+          <span class="val" id="val-speed">5/fr</span>
+        </div>
+        <input type="range" id="sl-speed" min="1" max="30" step="1" value="5">
+      </div>
+
+      <div class="ctrl">
+        <div class="ctrl-header">
+          <label for="sel-color">Color Mode</label>
+        </div>
+        <select id="sel-color">
+          <option value="rainbow"  selected>Rainbow</option>
+          <option value="golden">Golden Ratio</option>
+          <option value="plasma">Plasma</option>
+          <option value="depth">Depth</option>
+          <option value="cycle">Cycle RGB</option>
+          <option value="mono">Monochrome</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Preset angles — clicking these auto-restarts the simulation -->
+    <div>
+      <p class="panel-title" style="margin-bottom: 0.6rem;">Angle Presets — Restart to Apply</p>
+      <div class="presets-row">
+        <button class="preset-btn active" onclick="setPreset(137.508)">Golden · 137.5°</button>
+        <button class="preset-btn" onclick="setPreset(144)">Pentagonal · 144°</button>
+        <button class="preset-btn" onclick="setPreset(120)">Branches · 120°</button>
+        <button class="preset-btn" onclick="setPreset(90)">Grid · 90°</button>
+        <button class="preset-btn" onclick="setPreset(111.25)">Spokes · 111.25°</button>
+      </div>
+    </div>
+  </div>
+
+  <p class="hint">
+    The golden angle (≈ 137.508°, marked φ on the slider) produces the efficient packing seen in sunflowers and pine cones ·
+    Rational multiples of 360° create visible spokes — try 120° (3 arms) or 144° (5 arms) ·
+    Drag divergence slowly away from φ to watch spoke patterns emerge ·
+    Change color mode mid-animation for a hybrid effect
+  </p>
 
 </body>
 </html>
