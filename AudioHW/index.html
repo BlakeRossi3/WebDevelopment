@@ -2,72 +2,172 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Audio Visualizer</title>
-  <link rel="stylesheet" href="styles/default-styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Audio Visualizer — Blake Rossi</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../project-theme.css" />
+  <link rel="stylesheet" href="styles/default-styles.css" />
+
+  <style>
+    /* Dark theme overrides for default-styles.css */
+    body {
+      background: #030712 !important;
+      display: block !important;
+      height: auto !important;
+      min-height: 100vh !important;
+      font-family: 'Space Grotesk', sans-serif !important;
+    }
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2.5rem 1rem 3rem;
+    }
+    h1 {
+      font-family: 'Syne', sans-serif !important;
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      letter-spacing: -0.025em;
+      color: rgba(255,255,255,0.95) !important;
+      background: none !important;
+      margin: 0 0 1.5rem;
+    }
+    #now-playing {
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 0.7rem !important;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.45) !important;
+      font-weight: 400 !important;
+    }
+    #left-panel {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.12) !important;
+      border-radius: 1rem;
+    }
+    #checkboxs {
+      background: rgba(255,255,255,0.04) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      border-radius: 0.75rem;
+      color: rgba(255,255,255,0.62) !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 0.7rem !important;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    #checkboxs span { border-right-color: rgba(255,255,255,0.08) !important; }
+    #playButton, #fsButton, #toggle-panel {
+      background: rgba(255,255,255,0.06) !important;
+      border: 1px solid rgba(255,255,255,0.2) !important;
+      color: rgba(255,255,255,0.95) !important;
+      border-radius: 999px !important;
+      font-family: 'Space Grotesk', sans-serif !important;
+    }
+    #default-track-btn, #audioFormButton {
+      background: rgba(255,255,255,0.06) !important;
+      border: 1px solid rgba(255,255,255,0.18) !important;
+      color: rgba(255,255,255,0.9) !important;
+      border-radius: 999px !important;
+    }
+    .custom-file-label {
+      background: rgba(255,255,255,0.06) !important;
+      border: 1px solid rgba(255,255,255,0.18) !important;
+      color: rgba(255,255,255,0.9) !important;
+      border-radius: 999px !important;
+      cursor: pointer;
+    }
+    .custom-file-label:hover { background: rgba(255,255,255,0.1) !important; }
+    #volumeSlider, #bassSlider, #trebleSlider {
+      background: rgba(255,255,255,0.15) !important;
+    }
+    canvas { box-shadow: 0 0 48px rgba(0,0,0,0.7) !important; border-radius: 0.5rem; }
+    a {
+      color: rgba(255,255,255,0.5);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    a:hover { color: #fff; }
+  </style>
+
   <script src="./src/loader.js" type="module"></script>
 </head>
 <body>
-<main>
 
-  <h1> Mew's Audio Visualizer</h1>
+  <header class="project-header">
+    <a class="project-header__back" href="../index.html">← IGME-330</a>
+    <div class="project-header__divider"></div>
+    <p class="project-header__title">Audio Visualizer</p>
+    <div class="project-header__tags">
+      <span class="project-tag">Web Audio API</span>
+      <span class="project-tag">Canvas API</span>
+      <span class="project-tag">ES Modules</span>
+    </div>
+  </header>
 
-  <div id="left-panel">
-    <img src="media/djmew.jpg" alt="Music Image">
-    <section>
-      <button id="default-track-btn">Play Default Song</button>
-      <input type="file" id="file-input" class="custom-file-input" accept="audio/mp3">
-      <label for="file-input" class="custom-file-label">Upload Your Song</label>
-      <button id="audioFormButton">Frequency Mode</button>
-    </section>
-    
-    <section>
-      <label for="volumeLabel">Volume:</label>
-      <input type="range" id="volumeSlider" min="0" max="2" value="1" step="0.01">
-      <span id="volumeLabel">1</span>
-    </section>
+  <main>
 
-    <section>
-      <h1 id = "now-playing">Now playing:    New Adventure Theme.mp3</h1>
+    <h1>Mew's Audio Visualizer</h1>
 
-      <a href="instructions.html" target="_blank">View Instructions</a>
-    </section>
-</div>
+    <div id="left-panel">
+      <img src="media/djmew.jpg" alt="Music Image">
+      <section>
+        <button id="default-track-btn">Play Default Song</button>
+        <input type="file" id="file-input" class="custom-file-input" accept="audio/mp3">
+        <label for="file-input" class="custom-file-label">Upload Your Song</label>
+        <button id="audioFormButton">Frequency Mode</button>
+      </section>
 
-  <section id="checkboxs">
-    <span><input type="checkbox" id="cb-bars" checked><label for="cb-bars">Show Bars</label></span>
-    <span><input type="checkbox" id="cb-circles" checked><label for="cb-circles">Show Circles</label></span>
-    <span><input type="checkbox" id="cb-noise" unchecked><label for="cb-noise">Show Noise</label></span>
-    <span><input type="checkbox" id="cb-invert" unchecked><label for="cb-invert">Invert Colors</label></span>
-    <span><input type="checkbox" id="cb-emboss" unchecked><label for="cb-emboss">Show Emboss</label></span>
-  </section>
-  
-  <div id="canvas-container">
-    <img id ="mew-music" src="media/mew1.png" alt="Mewtwo" />
-    <img id ="mewtwo-music" src="media/mewtwo2.png" alt="Mewtwo" />
-    
-    <section id = "bass">
-      <label for="bassLabel">Bass:</label>
-      <input type="range" id="bassSlider" min="-30" max="30" step="1" value="0">
-    </section>
-    
-    <section id = "treble">
-      <label for="trebleLabel">Treble:</label>
-      <input type="range" id="trebleSlider" min="-30" max="30" step="1" value="0">
+      <section>
+        <label for="volumeLabel">Volume:</label>
+        <input type="range" id="volumeSlider" min="0" max="2" value="1" step="0.01">
+        <span id="volumeLabel">1</span>
+      </section>
+
+      <section>
+        <h1 id="now-playing">Now playing: New Adventure Theme.mp3</h1>
+        <a href="instructions.html" target="_blank">View Instructions</a>
+      </section>
+    </div>
+
+    <section id="checkboxs">
+      <span><input type="checkbox" id="cb-bars" checked><label for="cb-bars">Show Bars</label></span>
+      <span><input type="checkbox" id="cb-circles" checked><label for="cb-circles">Show Circles</label></span>
+      <span><input type="checkbox" id="cb-noise"><label for="cb-noise">Show Noise</label></span>
+      <span><input type="checkbox" id="cb-invert"><label for="cb-invert">Invert Colors</label></span>
+      <span><input type="checkbox" id="cb-emboss"><label for="cb-emboss">Show Emboss</label></span>
     </section>
 
-    <canvas width = 1000 height = 500 id="myCanvas"></canvas>
-    <video id="mewgif" autoplay loop muted playsinline>
-      <source src="media/mewgif.webm" type="video/webm">
-    </video>
-</div>
-  
-  <div id="controls">
-     <button id="toggle-panel">Show Controls</button>
+    <div id="canvas-container">
+      <img id="mew-music" src="media/mew1.png" alt="Mew" />
+      <img id="mewtwo-music" src="media/mewtwo2.png" alt="Mewtwo" />
+
+      <section id="bass">
+        <label for="bassLabel">Bass:</label>
+        <input type="range" id="bassSlider" min="-30" max="30" step="1" value="0">
+      </section>
+
+      <section id="treble">
+        <label for="trebleLabel">Treble:</label>
+        <input type="range" id="trebleSlider" min="-30" max="30" step="1" value="0">
+      </section>
+
+      <canvas width="1000" height="500" id="myCanvas"></canvas>
+      <video id="mewgif" autoplay loop muted playsinline>
+        <source src="media/mewgif.webm" type="video/webm">
+      </video>
+    </div>
+
+    <div id="controls">
+      <button id="toggle-panel">Show Controls</button>
       <button id="playButton" data-playing="no"></button>
       <button id="fsButton">Full Screen</button>
-      <img id ="mewtwo-gif" src="media/mewtwo1.gif" alt="Mewtwo" />
-      
-  </div>
-</main>
+      <img id="mewtwo-gif" src="media/mewtwo1.gif" alt="Mewtwo" />
+    </div>
+
+  </main>
 </body>
 </html>

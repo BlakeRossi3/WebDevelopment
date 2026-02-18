@@ -1,61 +1,156 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ninja Coffee</title>
+  <title>Ninja Coffee — Blake Rossi</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../project-theme.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+
+  <style>
+    /* Dark theme overrides for Bulma */
+    html, body {
+      background: #030712 !important;
+      color: rgba(255,255,255,0.88) !important;
+    }
+
+    /* Bulma navbar */
+    .navbar, .navbar.is-white, .navbar.has-shadow {
+      background: rgba(3,7,18,0.92) !important;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.08) !important;
+    }
+    .navbar-item, .navbar-item a, .navbar-end .navbar-item {
+      background: transparent !important;
+      color: rgba(255,255,255,0.65) !important;
+      font-family: 'Space Grotesk', sans-serif !important;
+    }
+    .navbar-item:hover, .navbar-end .navbar-item:hover {
+      background: rgba(255,255,255,0.06) !important;
+      color: rgba(255,255,255,0.95) !important;
+    }
+    .navbar-burger span {
+      background: rgba(255,255,255,0.7) !important;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb a, .breadcrumb li a {
+      color: rgba(255,255,255,0.4) !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 0.7rem !important;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .breadcrumb li.is-active a {
+      color: rgba(255,255,255,0.75) !important;
+    }
+    .breadcrumb li + li::before {
+      color: rgba(255,255,255,0.25) !important;
+    }
+
+    /* Section background */
+    .section { background: transparent !important; }
+
+    /* Typography */
+    .title, .subtitle, h1, h2, h3 {
+      font-family: 'Syne', sans-serif !important;
+      color: rgba(255,255,255,0.95) !important;
+      letter-spacing: -0.025em;
+    }
+    .title.is-size-1 { font-size: clamp(2rem, 5vw, 3.5rem) !important; }
+    .title.is-size-2, .subtitle.is-size-2 {
+      color: rgba(255,255,255,0.55) !important;
+      font-size: clamp(1.4rem, 3vw, 2.2rem) !important;
+    }
+
+    p {
+      font-family: 'Space Grotesk', sans-serif !important;
+      color: rgba(255,255,255,0.55) !important;
+    }
+
+    /* Price */
+    .is-size-4 {
+      font-family: 'Syne', sans-serif !important;
+      font-weight: 700;
+      color: rgba(255,255,255,0.9) !important;
+    }
+
+    /* Product image */
+    img { border-radius: 0.5rem; }
+
+    /* Back nav sits above Bulma navbar */
+    .project-header {
+      background: rgba(3,7,18,0.95) !important;
+      border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+    }
+  </style>
 </head>
 <body>
-    <nav class="navbar has-shadow is-white">
-      <div class="navbar-brand">
-        <a class="navbar-item">
-          <img src="assets/logo.png" alt="site logo"style = "max-height: 70px" class="py-2 px-2">
-        </a>
-        <a class="navbar-burger" id ="burger">
-          <span></span>
-          <span></span>
-          <span></span>
-        </a>
-      </div>
 
-      <div class="navbar-menu" id ="nav-links">
-        <div class="navbar-end">
-          <a class="navbar-item">My Account</a>
-          <a class="navbar-item">Shopping Cart (0)</a>
-        </div>
-      </div>
-    </nav>
-
-    <div class="section pt-4 pb-0">
-      <nav class="breadcrumb has-arrow-separator">
-        <ul class="container">
-          <li><a class="has-text-grey">Coffee Ninja</a></li>
-          <li><a class="has-text-grey">Shop</a></li>
-          <li class="is-active"><a>Docker Dark Roast</a></li>
-        </ul>
-      </nav>
+  <header class="project-header">
+    <a class="project-header__back" href="../index.html">← IGME-330</a>
+    <div class="project-header__divider"></div>
+    <p class="project-header__title">Bulma Coffee Example</p>
+    <div class="project-header__tags">
+      <span class="project-tag">Bulma CSS</span>
+      <span class="project-tag">Responsive</span>
+      <span class="project-tag">HTML</span>
     </div>
+  </header>
 
-    <section class="section">
-      <div class="container">
-        <div class="columns is-vcentered">
-          <div class="column is-3">
-            <h1 class="is-size-1 title">Docker</h1>
-            <h1 class="is-size-2 subtitle">Dark Roast</h1>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet est blanditiis numquam ab vel. Eligendi atque eveniet necessitatibus veritatis. Nostrum repellat similique ex numquam esse officia beatae ab temporibus pariatur.</p>
-          </div>
-          <div class="column is-5 has-text-centered">
-            <img src="assets/product.png" alt="Docker Coffee">
-          </div>
-          <div class="column is-4">
-            <div class="is-size-4 mb-4">$10.95</div>
-            <p class="mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam nobis cum iure quibusdam a veniam repellat, tempore possimus delectus harum doloribus accusamus et animi mollitia consequuntur, eos dolorem quam enim!</p>
-          </div>
+  <nav class="navbar has-shadow is-white">
+    <div class="navbar-brand">
+      <a class="navbar-item">
+        <img src="assets/logo.png" alt="site logo" style="max-height: 70px" class="py-2 px-2">
+      </a>
+      <a class="navbar-burger" id="burger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </a>
+    </div>
+    <div class="navbar-menu" id="nav-links">
+      <div class="navbar-end">
+        <a class="navbar-item">My Account</a>
+        <a class="navbar-item">Shopping Cart (0)</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="section pt-4 pb-0">
+    <nav class="breadcrumb has-arrow-separator">
+      <ul class="container">
+        <li><a class="has-text-grey">Coffee Ninja</a></li>
+        <li><a class="has-text-grey">Shop</a></li>
+        <li class="is-active"><a>Docker Dark Roast</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="columns is-vcentered">
+        <div class="column is-3">
+          <h1 class="is-size-1 title">Docker</h1>
+          <h1 class="is-size-2 subtitle">Dark Roast</h1>
+          <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet est blanditiis numquam ab vel. Eligendi atque eveniet necessitatibus veritatis. Nostrum repellat similique ex numquam esse officia beatae ab temporibus pariatur.</p>
+        </div>
+        <div class="column is-5 has-text-centered">
+          <img src="assets/product.png" alt="Docker Coffee">
+        </div>
+        <div class="column is-4">
+          <div class="is-size-4 mb-4">$10.95</div>
+          <p class="mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam nobis cum iure quibusdam a veniam repellat, tempore possimus delectus harum doloribus accusamus et animi mollitia consequuntur, eos dolorem quam enim!</p>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
- <script src = "src/index.js"></script>
+  <script src="src/index.js"></script>
 </body>
 </html>

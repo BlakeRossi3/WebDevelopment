@@ -1,67 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<title>Sine Start</title>
-	<style>canvas{ border: 1px solid black; }</style>
-	<script>
-	"use strict";
-	const canvasWidth = 400, canvasHeight = 300;
-	let ctx;
-    let x = 0, y = 0;
-    let angle = 0;
-    const fps = 12;
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Algorithmic Botany — Blake Rossi</title>
 
-    window.onload = init;
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-	function init(){
-		ctx = canvas.getContext("2d");
-		canvas.width = canvasWidth;
-		canvas.height = canvasHeight;
-		ctx.fillRect(0,0,canvasWidth,canvasHeight);
-        loop();
-	}
+  <link rel="stylesheet" href="../project-theme.css" />
 
-    const loop = () => {
-        setTimeout(loop,1000/fps);
-        ctx.save();
-        ctx.fillStyle = "black";
-        ctx.globalAlpha = 1/fps;
-        ctx.fillRect(0,0,canvasWidth,canvasHeight);
-        ctx.restore();
-        x += 10;
-        angle += 0.3;
-        y = canvasHeight/2 + Math.sin(angle) * 100;
-        drawCircle(ctx,x,y,2,"white");
-
-        y = canvasHeight/2 + Math.cos(angle) * 100;
-        drawCircle(ctx,x,y,2,"red");
-
-        y = canvasHeight/2 + Math.sqrt(x%50) * 5;
-        drawCircle(ctx,x,y,4,"yellow");
-
-        if(x > canvasWidth) x = 0;
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2.5rem 1.5rem 3rem;
+      gap: 1.25rem;
     }
+    h2 {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.85);
+      margin: 1.5rem 0 0.5rem;
+      align-self: flex-start;
+      max-width: 420px;
+    }
+    canvas {
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 0.5rem;
+      box-shadow: 0 0 40px rgba(0,0,0,0.6);
+    }
+    ul {
+      max-width: 420px;
+      align-self: flex-start;
+      padding-left: 1.25rem;
+    }
+    ul li {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.7;
+    }
+    ul ul li { color: rgba(255,255,255,0.4); }
+  </style>
 
-	// helpers
-	function dtr(degrees){
-		return degrees * (Math.PI/180);
-	}
+  <script>
+  "use strict";
+  const canvasWidth = 400, canvasHeight = 300;
+  let ctx;
+  let x = 0, y = 0;
+  let angle = 0;
+  const fps = 12;
 
-	function drawCircle(ctx,x,y,radius,color){
-		ctx.save();
-		ctx.fillStyle = color;
-		ctx.beginPath();
-		ctx.arc(x,y,radius,0,Math.PI * 2);
-		ctx.closePath();
-		ctx.fill();
-		ctx.restore();
-	}
+  window.onload = init;
 
-	</script>
+  function init(){
+    ctx = canvas.getContext("2d");
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+    ctx.fillRect(0,0,canvasWidth,canvasHeight);
+    loop();
+  }
+
+  const loop = () => {
+    setTimeout(loop,1000/fps);
+    ctx.save();
+    ctx.fillStyle = "black";
+    ctx.globalAlpha = 1/fps;
+    ctx.fillRect(0,0,canvasWidth,canvasHeight);
+    ctx.restore();
+    x += 10;
+    angle += 0.3;
+    y = canvasHeight/2 + Math.sin(angle) * 100;
+    drawCircle(ctx,x,y,2,"white");
+
+    y = canvasHeight/2 + Math.cos(angle) * 100;
+    drawCircle(ctx,x,y,2,"red");
+
+    y = canvasHeight/2 + Math.sqrt(x%50) * 5;
+    drawCircle(ctx,x,y,4,"yellow");
+
+    if(x > canvasWidth) x = 0;
+  }
+
+  function dtr(degrees){
+    return degrees * (Math.PI/180);
+  }
+
+  function drawCircle(ctx,x,y,radius,color){
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x,y,radius,0,Math.PI * 2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+  </script>
 </head>
 <body>
-<canvas id="canvas"></canvas>
+
+  <header class="project-header" style="position:static; width:100%; margin: -2.5rem -1.5rem 0; box-sizing: content-box; padding-left: 1.5rem; padding-right: 1.5rem;">
+    <a class="project-header__back" href="../index.html">← IGME-330</a>
+    <div class="project-header__divider"></div>
+    <p class="project-header__title">Algorithmic Botany — Sine</p>
+    <div class="project-header__tags">
+      <span class="project-tag">Canvas API</span>
+      <span class="project-tag">Sine Waves</span>
+      <span class="project-tag">Procedural</span>
+    </div>
+  </header>
+
+  <canvas id="canvas"></canvas>
 
 </body>
 </html>

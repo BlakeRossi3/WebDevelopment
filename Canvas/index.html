@@ -1,35 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<title>Screensaver</title>
-	<link rel="stylesheet" href="styles/default-styles.css">
-	
-    <script type="module" src="src/main.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JS Canvas Screensaver — Blake Rossi</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../project-theme.css" />
+  <link rel="stylesheet" href="styles/default-styles.css" />
+
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      gap: 1rem;
+      padding: 2rem 1.5rem 3rem;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    canvas {
+      border: 1px solid rgba(255,255,255,0.12) !important;
+      border-radius: 0.5rem;
+      box-shadow: 0 0 48px rgba(0,0,0,0.65);
+    }
+    section { margin: 0; }
+    section p {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.38);
+      text-transform: uppercase;
+    }
+    .controls-row {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .checkbox-row {
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .checkbox-row span {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .checkbox-row label {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+    }
+  </style>
+
+  <script type="module" src="src/main.js"></script>
 </head>
 <body>
-	<canvas width="640" height="480">
-		Get a real browser!
-	</canvas>
-    <section>
-        <button id="btn-play">Play</button>
-        <button id="btn-pause">Pause</button>
-        <button id="btn-clear">Clear Screen</button>
-      </section>
-      <section>
-        <span>
-          <input type="checkbox" id="cb-rectangles" checked>
-          <label for="cb-rectangles">Rectangles</label>
 
-          <input type="checkbox" id="cb-arcs" checked>
-          <label for="cb-arcs">Arcs</label>
+  <header class="project-header" style="position:static; width:100%; margin: -2rem -1.5rem 0; box-sizing: content-box; padding-left: 1.5rem; padding-right: 1.5rem;">
+    <a class="project-header__back" href="../index.html">← IGME-330</a>
+    <div class="project-header__divider"></div>
+    <p class="project-header__title">JS Canvas Screensaver</p>
+    <div class="project-header__tags">
+      <span class="project-tag">Canvas API</span>
+      <span class="project-tag">Animation</span>
+      <span class="project-tag">JavaScript</span>
+    </div>
+  </header>
 
-          <input type="checkbox" id="cb-lines" checked>
-          <label for="cb-lines">Lines</label>
-        </span>
-      </section>
-      <section>
-        <p>Click on the screen to "spraypaint" rectangles (you probably want the screensaver to be paused)</p>
-      </section>
+  <canvas width="640" height="480">Get a real browser!</canvas>
+
+  <div class="controls-row">
+    <button id="btn-play">Play</button>
+    <button id="btn-pause">Pause</button>
+    <button id="btn-clear">Clear Screen</button>
+  </div>
+
+  <div class="checkbox-row">
+    <span>
+      <input type="checkbox" id="cb-rectangles" checked>
+      <label for="cb-rectangles">Rectangles</label>
+    </span>
+    <span>
+      <input type="checkbox" id="cb-arcs" checked>
+      <label for="cb-arcs">Arcs</label>
+    </span>
+    <span>
+      <input type="checkbox" id="cb-lines" checked>
+      <label for="cb-lines">Lines</label>
+    </span>
+  </div>
+
+  <section>
+    <p>Click on the screen to "spraypaint" rectangles — pause first for best results</p>
+  </section>
+
 </body>
 </html>

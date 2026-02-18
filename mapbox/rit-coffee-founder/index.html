@@ -1,26 +1,105 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8" />
-    <title>Add custom markers in Mapbox GL JS</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
-    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
-    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet" />
-    <script src="./src/loader.js" type="module"></script>
-    <link rel="stylesheet" href="styles/default-styles.css">
+  <meta charset="utf-8" />
+  <title>RIT Coffee Finder — Blake Rossi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../../project-theme.css" />
+
+  <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+  <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles/default-styles.css" />
+
+  <style>
+    html, body { height: 100%; }
+    body { display: flex; flex-direction: column; }
+
+    .project-header { position: sticky; top: 0; flex-shrink: 0; }
+
+    #map {
+      position: relative !important;
+      top: auto !important;
+      bottom: auto !important;
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+    }
+
+    #controls {
+      position: absolute !important;
+      top: 68px !important;
+      left: 16px !important;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      background: rgba(3,7,18,0.88) !important;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.12) !important;
+      border-radius: 0.85rem !important;
+      padding: 0.65rem !important;
+      width: auto !important;
+      height: auto !important;
+    }
+
+    #controls button {
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 0.68rem !important;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      width: 100% !important;
+      background: rgba(255,255,255,0.05) !important;
+      color: rgba(255,255,255,0.8) !important;
+      border-color: rgba(255,255,255,0.1) !important;
+      border-radius: 0.5rem !important;
+      padding: 0.4rem 0.75rem !important;
+      white-space: nowrap;
+    }
+    #controls button:hover {
+      background: rgba(255,255,255,0.1) !important;
+      color: rgba(255,255,255,0.95) !important;
+      border-color: rgba(255,255,255,0.2) !important;
+    }
+
+    .mapboxgl-popup-content {
+      font-family: 'Space Grotesk', sans-serif;
+      background: #0a0c19;
+      color: rgba(255,255,255,0.9);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+    }
+  </style>
+
+  <script src="./src/loader.js" type="module"></script>
 </head>
-
 <body>
-    <div id='map'></div>
-    <div id="controls">
-        <button id="btn1">RIT @ Zoom 15.5</button>
-        <button id="btn2">RIT @ Isometric View</button>
-        <button id="btn3">World @ Zoom 0</button>
-        <button id="btn4">IGM @ Zoom 18</button>
-        <button id="btn5">Load some markers</button>
-    </div>
-</body>
 
+  <header class="project-header">
+    <a class="project-header__back" href="../../index.html">← IGME-330</a>
+    <div class="project-header__divider"></div>
+    <p class="project-header__title">RIT Coffee Finder</p>
+    <div class="project-header__tags">
+      <span class="project-tag">Mapbox GL JS</span>
+      <span class="project-tag">GeoJSON</span>
+      <span class="project-tag">JavaScript</span>
+    </div>
+  </header>
+
+  <div id="map"></div>
+
+  <div id="controls">
+    <button id="btn1">RIT @ Zoom 15.5</button>
+    <button id="btn2">RIT @ Isometric View</button>
+    <button id="btn3">World @ Zoom 0</button>
+    <button id="btn4">IGM @ Zoom 18</button>
+    <button id="btn5">Load Markers</button>
+  </div>
+
+</body>
 </html>

@@ -1,19 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<title>Technobabble Generator</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1.0">
-	<link rel="stylesheet" href="styles/default-styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Lexend+Giga&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <title>Technobabble Generator — Blake Rossi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1.0">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../project-theme.css" />
+  <link rel="stylesheet" href="styles/default-styles.css" />
+
+  <style>
+    html, body { height: 100%; }
+    body {
+      display: flex !important;
+      flex-direction: column;
+      font-size: 1rem !important;
+      color: rgba(255,255,255,0.62) !important;
+      text-align: left !important;
+    }
+    h1 {
+      font-family: 'Syne', sans-serif !important;
+      font-size: clamp(1.5rem, 4vw, 2.2rem) !important;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: none !important;
+      color: rgba(255,255,255,0.95) !important;
+      padding: 0 !important;
+      margin: 0 0 1.5rem !important;
+      text-align: left !important;
+    }
+    .container {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      justify-content: flex-start !important;
+      height: auto !important;
+      gap: 1.25rem;
+      padding: 2.5rem 2rem 3rem !important;
+      margin: 0 !important;
+    }
+    .button-row {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+    #btn-gen-1, #btn-gen-5 {
+      width: auto !important;
+      height: auto !important;
+      font-size: 0.85rem !important;
+      padding: 0.45rem 1.1rem !important;
+      display: inline-flex !important;
+    }
+    #output {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem) !important;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: rgba(255,255,255,0.88) !important;
+      line-height: 1.4;
+      text-align: left !important;
+      max-width: 640px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Technobabble Generator</h1>
-    <div class="container">
-      <button id="btn-gen-1">More Technobabble!</button>
-      <button id ="btn-gen-5">Give me 5 Technobabble!</button>
-      <div id="output">Loading...</div>
+
+  <header class="project-header">
+    <a class="project-header__back" href="../index.html">← IGME-330</a>
+    <div class="project-header__divider"></div>
+    <p class="project-header__title">Technobabble Generator</p>
+    <div class="project-header__tags">
+      <span class="project-tag">JavaScript</span>
+      <span class="project-tag">DOM API</span>
+      <span class="project-tag">Arrays</span>
     </div>
-    <script type="module" src="src/main.js"></script>
+  </header>
+
+  <div class="container">
+    <h1>Technobabble Generator</h1>
+    <div class="button-row">
+      <button id="btn-gen-1">More Technobabble!</button>
+      <button id="btn-gen-5">Give me 5!</button>
+    </div>
+    <div id="output">Loading...</div>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
 </body>
 </html>
